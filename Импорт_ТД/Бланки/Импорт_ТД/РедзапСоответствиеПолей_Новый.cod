@@ -1086,11 +1086,11 @@ end;
       If секѕриемник.RowsCount>1 then
           секѕриемник.DeleteRow(1,секѕриемник.RowsCount+1);
       end;
-      if ќтрезать(»м€Ћиста) = "" then
-        CheckBox2.State=Ћожь;
-      ELSE
-        CheckBox2.State=»стина;
-      end;
+--      if ќтрезать(»м€Ћиста) = "" then
+--        CheckBox2.State=Ћожь;
+--      ELSE
+--        CheckBox2.State=»стина;
+--      end;
       ¬идимость—толбца»м€Ћиста ;
       дл€ I = 1..»м€Ћистов. оличество цикл
          секц»сточник.Cell[4,2].List.Add(»м€Ћистов[I].GetField("»м€"));
