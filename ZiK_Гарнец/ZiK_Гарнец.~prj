@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<Project Version="1">
+  <Options Caption="Зарплата и Кадры" Comment="Зарплата и Кадры" Version="0.000.01" Author="ФОЕ" Code="0" SubCode="0" WebCode="0" WebSubCode="0" Frontal="True"/>
+  <Usage>
+    <Project Name="СИС2"/>
+    <Project Name="МашинаРеквизитов"/>
+    <Project Name="Базовый"/>
+    <Project Name="ЗарплатаСтандарт"/>
+  </Usage>
+  <Groups>
+    <Group Name="Записи" Type="Documents" Disabled="False"/>
+    <Group Name="Классы" Type="Classes" Disabled="False"/>
+    <Group Name="Бланки" Type="Blanks" Disabled="False"/>
+    <Group Name="Картотеки" Type="Cards" Disabled="False"/>
+    <Group Name="СтруктурыУчета" Type="CalcStructs" Disabled="False"/>
+    <Group Name="Операции" Type="CalcClasses" Disabled="False"/>
+    <Group Name="Отчеты" Type="Reports" Disabled="False"/>
+    <Group Name="Помощь" Type="Helps" Disabled="False"/>
+    <Group Name="Схемы доступа" Type="Access" Disabled="False"/>
+    <Group Name="Shared" Type="Other" Disabled="False"/>
+    <Group Name="Документация" Type="Other" Disabled="False"/>
+    <Group Name="Настройки печати" Type="Other" Disabled="False"/>
+  </Groups>
+</Project>

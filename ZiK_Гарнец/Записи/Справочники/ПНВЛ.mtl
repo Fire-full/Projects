@@ -1,0 +1,9 @@
+hierarchical record ПНВЛ   inherited Первичка.Базовая.БазоваяИерархическаяКодИмя  title "ПНВЛ";
+  field ДАТНАЧИСП                      :DATE          title "ДАТА начала использования";
+  field ТаблВСтроку                    :String        title "Табл В Строку";
+  struct ПЕРИОДЫ array Integer                            title 'ПЕРИОДЫ';
+      field ПЕРНАЧ           :REAL title "Период начала";
+      field ПЕРПРОЦ          :REAL title "Процент";
+     -- Unique ПЕРНАЧ;
+  end;
+end;

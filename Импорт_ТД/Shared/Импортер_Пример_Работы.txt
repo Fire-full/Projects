@@ -1,0 +1,256 @@
+class inherited Первичка.БазовыйБланк "Конвертор из программы Турбо Бухгалтер версии 6.9";
+
+  Import СИС2             Classes Файл, Функции;
+  Import МашинаРеквизитов Classes Переменные;
+  Import Первичка         Classes Переменные, Конвертация, Функции;
+
+InClass Private
+
+  Stored var ФайлСДанными        :String;
+  Stored var ФайлСДанными_Соотв  :String;
+  Stored var ФайлСОстатками      :String;
+  Stored var ФайлСОперациями     :String;
+
+  Stored var ПропускатьИмеющиесяЗаписи :logical; --  Импортер разрешает конфликты по Skip
+
+InObject Public
+
+  func ПолучитьПравоНаЗагрузку:Logical;
+    Result = ТекущиеПрава.ПолучитьЗначениеПрава(ТекущиеПрава.Управление_РазрешенаЗагрузкаИнформационнойБазы);
+  end;
+
+InObject Private
+
+  var кнЗагрузить :Button;
+
+  proc шаблон_ПриОткрытии(Create :Logical);
+    var vFrame :TemplateFrame;
+    var vForm  :BlankForm;
+
+    inherited шаблон_ПриОткрытии(Create);
+    try
+      if Бланк_ЗагрузкаОстатковТиСа <> nil then
+        vForm          = Бланк_ЗагрузкаОстатковТиСа.Create;
+        vFrame         = фреймГлавное.AddFrame;
+        vFrame.Caption = vForm.Template.RootFrame.Caption;
+        LoadForm(vFrame, vForm);
+      end;
+      if Бланк_ЗагрузкаПроводок <> nil then
+        vForm          = Бланк_ЗагрузкаПроводок.Create;
+        vFrame         = фреймГлавное.AddFrame;
+        vFrame.Caption = vForm.Template.RootFrame.Caption;
+        LoadForm(vFrame, vForm);
+      end;
+      if Бланк_ЗагрузкаСреднего <> nil then
+        vForm            = Бланк_ЗагрузкаСреднего.Create;
+        vFrame           = фреймГлавное.AddFrame;
+        vFrame.Caption   = vForm.Template.RootFrame.Caption;
+        LoadForm(vFrame, vForm);
+      end;
+    finally
+      фреймГлавное.ShowTabs = (фреймГлавное.FramesCount > 1);
+    end;
+
+    if ФайлСДанными_Соотв = "" then
+      ФайлСДанными_Соотв = Умолчание_Сценарий_Данные;
+    end;
+  end;
+
+  proc ОбработкаВидимостиОбъектов;
+    inherited ОбработкаВидимостиОбъектов;
+    кнЗагрузить.Enabled = ПолучитьПравоНаЗагрузку;
+  end;
+
+  func ПолеФайлСценария_ПриОбзоре(Cell :TemplateCell; Value :Variant; var NewValue :Variant) :Logical;
+    ChooseFile(NewValue, "Имя файла...", "Файл сценария (*.scn)|*.scn");
+    Template.EndEdit(True);
+    Return(False);
+  end;
+
+  proc ПолеФайл_ПриВыходе(Cell :TemplateCell; Index :Integer);
+    if Cell.Value<>"" and ПолучитьРасширениеФайла(Cell.Value)<>"xml" then
+      Message("Неверный формат файла загрузки. Файл должен быть в формате 'xml'");
+    end;
+  end;
+
+  func ПолеФайл_ПриОбзоре(Cell :TemplateCell; Value :Variant; var NewValue :Variant) :Logical;
+    ChooseFile(NewValue, "Имя файла...", "Файл загрузки (*.xml)|*.xml");
+    Template.EndEdit(True);
+    Result = False;
+  end;
+
+  proc кнЗагрузить_ПриНажатии(Sender :Button);
+    var ДанныеЕсть,      ОстаткиЕсть,      ОперацииЕсть      :Integer;
+    var ДанныеЗагружены, ОстаткиЗагружены, ОперацииЗагружены :Logical;
+    var ДанныеСоотв                                          :Integer;
+
+    func ПроверитьФайл(aFileName, aField :String):Integer;
+      Result = cmOk;
+      if    aFileName="" then
+        Return(cmNo);
+      elsif ПолучитьРасширениеФайла(aFileName)<>"xml" then
+        Message("Неверный формат файла загрузки. Файл должен быть в формате 'xml'");
+        Template.Field = aField;
+        Return(cmCancel);
+      elsif not ExistFile(Trim(aFileName)) then
+        Message("Файл "+aFileName+" не найден. Дальнейшая загрузка данных невозможна.");
+        Template.Field = aField;
+        Return(cmCancel);
+      end;
+    end;
+
+    func ПроверитьСценарий(aFileName, aField :String):Integer;
+      Result = cmOk;
+      if    aFileName="" then
+        Return(cmNo);
+      elsif ПолучитьРасширениеФайла(aFileName)<>"scn" then
+        Message("Неверный формат файла соответствия полей. Файл должен быть в формате 'scn'");
+        Template.Field = aField;
+        Return(cmCancel);
+      elsif not ExistFile(Trim(aFileName)) then
+        Message("Файл "+aFileName+" не найден. Дальнейшая загрузка данных невозможна.");
+        Template.Field = aField;
+        Return(cmCancel);
+      end;
+    end;
+
+    if ПолучитьПравоНаЗагрузку then
+      if not (ФайлСДанными<>"" or ФайлСОстатками<>"") then
+        Message("Пожалуйста, выберите файл для загрузки данных или остатков");
+        Template.Field = "ФайлСДанными";
+        Return; Abort;
+      else
+        ДанныеЕсть   = ПроверитьФайл    (ФайлСДанными,       "ФайлСДанными");
+        ДанныеСоотв  = ПроверитьСценарий(ФайлСДанными_Соотв, "ФайлСДанными_Соотв");
+        ОстаткиЕсть  = ПроверитьФайл    (ФайлСОстатками,     "ФайлСОстатками");
+        ОперацииЕсть = ПроверитьФайл    (ФайлСОперациями,    "ФайлСОперациями");
+
+        if not (ДанныеЕсть = cmCancel or ОстаткиЕсть = cmCancel or ОперацииЕсть = cmCancel) then
+          if ДанныеЕсть=cmOk and ДанныеСоотв=cmOk then
+            try
+              Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 'Приложения\Коды регионов.tbc', 'tbc');
+              Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 'Приложения\Коды стран.tbc', 'tbc');
+
+              -- System.RecordsImport(ФайлСДанными, Importer.Replace, [Importer.ShowWizard,Importer.AutoImport]);
+              with Importer.Create do
+                AutoCorr     = True;
+                LoadCorrespondence(ФайлСДанными_Соотв);
+                if ПропускатьИмеющиесяЗаписи then
+                   ConflictMode = Importer.Skip;
+                else
+                   ConflictMode = Importer.Replace;
+                end;
+                ImportFromFile(ФайлСДанными, "xml", [Importer.ShowWizard, Importer.AutoImport]);
+              end;
+              Событие_69_База_Загрузка.   Execute([Self]);
+              Событие_69_База_Конвертация.Execute([Self]);
+              ДанныеЗагружены = True;
+            except
+              ДанныеЗагружены = False;
+              Message("Ошибка при загрузке базы данных");
+              Abort;
+            end;
+          end;
+
+          if ОстаткиЕсть=cmOk then
+            try
+              System.RecordsImport(ФайлСОстатками, Importer.Replace, [Importer.ShowWizard,Importer.AutoImport]);
+              Событие_69_Остатки_Загрузка.   Execute([Self]);
+              Событие_69_Остатки_Конвертация.Execute([Self]);
+              ОстаткиЗагружены = True;
+            except
+              ОстаткиЗагружены = False;
+              Message("Ошибка при загрузке базы остатков");
+              Abort;
+            end;
+          end;
+
+          -- сделано так, чтобы можно было загрузить и остатки, и операции одновременно
+          if ОперацииЕсть=cmOk then
+            try
+              System.RecordsImport(ФайлСОперациями, Importer.Replace, [Importer.ShowWizard,Importer.AutoImport]);
+              Событие_69_Операции_Загрузка.   Execute([Self]);
+              Событие_69_Операции_Конвертация.Execute([Self]);
+              ОперацииЗагружены = True;
+            except
+              ОперацииЗагружены = False;
+              Message("Ошибка при загрузке базы операций");
+              Abort;
+            end;
+          end;
+
+
+          if    ДанныеЗагружены then
+            ПерезапускПрограммыПослеКонвертации;
+          elsif ОстаткиЗагружены or ОперацииЗагружены then
+            Message("Загрузка завершена");
+          end;
+        end;
+      end;
+    end;
+  end;
+
+  proc кнПомощь_ПриНажатии(Sender :Button);
+    OpenEditor(BaseInfo.ProjectByName[ClassProject].Folder + 'Документация\Конвертация.txt');
+  end;
+
+  func КомандаПомощь_ПриИсполнении(Command :Command) :Logical;
+    OpenEditor(BaseInfo.ProjectByName[ClassProject].Folder + 'Документация\Конвертация.txt');
+    Result = False;
+  end;
+
+  func фреймГлавное_ПриПереключении(Frame :TemplateFrame; NewFrame :TemplateFrame) :Logical;
+    УстановитьФокусНаПервоеПолеВводаФрейма(NewFrame, True);
+    Result = True; 
+  end;
+
+  func Умолчание_ПутьДляСценариев:String;
+    Result = BaseInfo.ProjectByName[Self.ClassProject].Folder + 'Приложения\';
+  end;
+
+  func Умолчание_Сценарий_Данные:String;
+    Result = Умолчание_ПутьДляСценариев + 'Сценарий загрузки из 6.9.scn';
+  end;
+
+  -------ПРИМЕР
+  proc ПроверитьЗагрузкуСправочников;
+    with Query.Create([УправлениеЗаказами.Справочники.ПравилаОплат]) do
+      Select;
+      if EOF then
+        -- нет ни одного юзера
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Справочники\Атрибуты.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Справочники\Важность.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Справочники\Правила Оплат.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Справочники\Правила Скидок.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Справочники\Состояния процессов.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Справочники\Статус Движения.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Справочники\Тип Договора.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Справочники\Типы ТМЦ.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Справочники\Типы Цен.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Меню\Интерфейсные Панели.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Меню\Интерфейсные Панели ГП.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Меню\Команды Управления.tbc', 'tbc');
+        Importer.Create.ImportFromFile(BaseInfo.ProjectByName[Self.ClassProject].Folder + 
+          'Shared\Import\Меню\Общие Отчеты.tbc', 'tbc');
+
+        Message('Загружены Справочники!' );
+      end;
+        -- нет ни одного юзера
+
+    end;
+  end;
+  -------ПРИМЕР
+end
+

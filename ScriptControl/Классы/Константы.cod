@@ -1,0 +1,21 @@
+Class "Константы, используемые проектом";
+
+
+  Import СИС2 Classes Функции;
+
+
+InClass Public
+
+
+  func ПолучитьВерсиюПроекта :Numeric;
+    Result = СформироватьВерсиюПроекта(ClassProject);
+  end;
+
+
+  ИмяВерсииПроекта	:String = 'ДляПользователей.ВерсияПроекта';
+
+
+InClass Private
+
+
+End

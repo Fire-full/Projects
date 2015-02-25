@@ -1,0 +1,132 @@
+class "SQL";  --  SQL-запрос выполняется ОЧЕНЬ быстро.
+
+inclass Public
+-- При необходимости удалить все данные из картотеки или по условию.
+-- При необходимости удалить все данные из картотеки или по условию.
+-- При необходимости удалить все данные из картотеки или по условию.
+--------------------------------------------------------------------------------
+proc УдалитьВсеЗаписиВКартотеке(ИмяКарт :String);
+var vSQL :String;
+  vSQL = " Delete From " +ИмяКарт ;
+  ExecuteSQL( vSQL );
+end;
+--------------------------------------------------------------------------------
+Функ SqlДата(Дат:Вариант):Строка;
+  Если   ТипПеременной(Дат) = 1 Тогда
+
+  ЕслиЖе ТипПеременной(Дат) = 5 Тогда
+
+  Илсе;
+
+  Результат = "" ;
+Кнуф;
+--------------------------------------------------------------------------------
+--Доработать...
+proc УдалитьПоУсловию (ИмяКарт :String; Условие :Строка; Дата1 :Вариант; Дата2 :Вариант );
+var vSQL :String;
+  vSQL = " Delete From " + ИмяКарт                 +
+         " Where "       + Условие                 +
+         " Between "     + SqlДата(Дата1) + " and " + SqlДата(Дата2);
+  ExecuteSQL( vSQL          );
+end;
+---------------------------------------------------------------------------------
+-- При необходимости удалить все данные из картотеки или по условию.
+-- При необходимости удалить все данные из картотеки или по условию.
+-- При необходимости удалить все данные из картотеки или по условию.
+-- inclass Public
+
+  proc ПолучитьДанныеИзSQL_DB(аЗапрос      : string;
+                              аИмяПК       : string="";
+                              аПорт        : string="";
+                              аИмяБД       : string;
+                              аЛогин       : string;
+                              аПароль      : string;
+                              aFieldsNames : string[];
+                              aData        : variant[2];
+                              aBdType      : string="");
+
+    var Connection, Recordset, Fields :AutoObject;
+    var i :Integer;
+  --  var locData:variant[];
+    var locFieldsCount,locRecordsCount:integer;
+
+    --Проба Запроса данных...
+          aBdType = "MSSQL";
+          аИмяБД  = "Проба";
+          аИмяПК  = "FOE2013\SQL2008";
+          аЛогин  = "";   --"sa"
+          аПароль = "";   --"1"
+          аЗапрос =
+--          "SELECT TOP 1000 [_Period]  " +
+          "SELECT [_Period] " +
+          "      ,[_Fld732] " +
+          "      ,[_Fld733] " +
+          "      ,[_Fld734] " +
+          "      ,[_Fld735] " +
+          "      ,[_Fld736] " +
+          "      ,[_Fld568] " +
+          "      ,[_Fld569] " +
+          "      ,[_Fld570] " +
+          "FROM [Проба].[dbo].[_InfoRg224]";
+    --Проба Запроса данных...
+
+      Connection = AutoObject.Create("ADODB.Connection");
+      if aBdType="MSSQL" then
+        Connection.ConnectionString =
+          "Provider=SQLOLEDB.1;"+
+          if(аЛогин="","Integrated Security=SSPI;","UserID="+аЛогин+";Password="+аПароль+";") +
+          "Data Source=" + if(аИмяПК="","localhost",аИмяПК) + ";Initial Catalog=" + аИмяБД +";";
+      elsif aBdType="MySQL" then   --http://dev.mysql.com/doc/refman/5.1/en/connector-odbc.html
+        Connection.ConnectionString =
+          "DRIVER={MySQL ODBC 5.1 Driver};"+
+          "SERVER="+if(аИмяПК="","localhost",аИмяПК)+";"+
+          "PORT="+if(аПорт="","3306",аПорт)+";"+
+          "DATABASE="+аИмяБД+";"+
+          "USER="+аЛогин+";"+
+          "PASSWORD="+аПароль+";"+
+          "OPTION=3;";
+      end;
+      try
+        Connection.Invoke("Open");
+        Recordset = AutoObject.Create("ADODB.Recordset");
+        Recordset.CursorLocation = 3;--adUseClient;
+        Recordset.Invoke("Open", аЗапрос, Connection,
+                                 0,  -- adOpenForwardOnly,
+                                 1,  -- adLockReadOnly
+                                 1); -- adCmdText
+        Fields         = Recordset.Fields;
+        locFieldsCount = Integer(Fields.Count);
+        for i = 0..locFieldsCount - 1 do
+          aFieldsNames[i+1] = String(Fields.Item[i].Name);
+        end;
+        while not Logical(Recordset.EOF) do
+          locRecordsCount=locRecordsCount+1;
+          for i = 1..locFieldsCount do
+            aData[locRecordsCount,i] = Fields.Item[i-1].Value;
+          end;
+          Recordset.MoveNext;
+        end;
+      finally
+        Fields=nil;
+        if Recordset<>nil then
+          if Recordset.State<>0 then
+            Recordset.Invoke("Close");
+          end;
+          Recordset=nil;
+        end;
+        if Connection<>nil then
+          if Connection.State<>0 then
+            Connection.Invoke("Close");
+          end;
+          Connection = nil;
+        end;
+      end;
+  end;
+
+
+inobject
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+-- inobject
+end

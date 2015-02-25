@@ -1,0 +1,15 @@
+
+reference спрЗВАНИЯ title 'ЗВАНИЯ', from Справочники.ЗВАНИЯ, filter "Код<>'' and ТипЗаписи in [0, 1]", card Справочники.картЗВАНИЯ;
+  field Код          synonym Имя      :String, from Код;
+  field Наименование synonym Описание :String, notrefresh, from Имя;
+end;
+--
+reference спрУченыеСтепени title 'Ученые Степени', from Справочники.ЗВАНИЯ, filter "Код<>'' and ТипЗаписи = 2", card Справочники.картЗВАНИЯ;
+  field Код          synonym Имя      :String, from Код;
+  field Наименование synonym Описание :String, notrefresh, from Имя;
+end;
+--
+reference спрУченыеЗвания title 'Ученые Степени', from Справочники.ЗВАНИЯ, filter "Код<>'' and ТипЗаписи = 3", card Справочники.картЗВАНИЯ;
+  field Код          synonym Имя      :String, from Код;
+  field Наименование synonym Описание :String, notrefresh, from Имя;
+end;

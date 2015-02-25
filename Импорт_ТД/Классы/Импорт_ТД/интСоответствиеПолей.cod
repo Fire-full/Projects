@@ -1,0 +1,71 @@
+--class "СоответствиеПолей";
+class inherited МашинаРеквизитов.Базовые.интЗаписьСРеквизитом  "СоответствиеПолей";
+
+Импорт МашинаРеквизитов Classes Базовые.интЗаписьКодИмя;
+
+InClass Public
+
+  ---------------------------------------------------------
+
+  func СвязанныйКлассЗаписей :Class СИС2.Базовая.БазоваяЗапись;
+    Result = Импорт_ТД.Импорт_ТД.запСоответствиеПолей;
+  end;
+
+  func Create :Импорт_ТД.Импорт_ТД.интСоответствиеПолей;
+    Result        = inherited Create;
+    Result.Record = Импорт_ТД.Импорт_ТД.запСоответствиеПолей.Create;
+  end;
+
+  func ОткрытьПоЗаписи synonym OpenRecord( aRec :Импорт_ТД.Импорт_ТД.запСоответствиеПолей ) :Импорт_ТД.Импорт_ТД.интСоответствиеПолей;
+    Result        = inherited Create;
+    Result.Record = aRec;
+  end;
+
+  func БланкРедакторПоУмолчанию :Class BlankForm;
+    Result = Импорт_ТД.Импорт_ТД.РедСоответствиеПолей;
+  end;
+
+  func КартотекаПоУмолчанию :Class CardForm;
+    Result = Импорт_ТД.Импорт_ТД.картСоответствиеПолей;
+  end;
+
+InClass Private
+
+InObject Public
+
+  Record :Импорт_ТД.Импорт_ТД.запСоответствиеПолей;
+
+  proc Инициализировать synonym Init(аИмя : String = ''; аКод : String = '');
+    var аИм  : String;
+    var I,X  : Целое;
+    Assert(Record.State = Kernel.Record.Created);
+    with Record do
+      if (Record.Код = '') then
+        if (аКод <> '') then
+          Record.Код = аКод;
+        else
+          аИм        = Стр(Record);
+          I          = ПОЗ(":",аИм);
+          X          = ПОЗ("}",аИм);
+          Record.Код = ПодСтр(аИм, I+1, (X-1)-I );   -- "{Импорт_ТД.Импорт_ТД.запСоответствиеПолей:4}"
+        end;
+      end;
+      if (Record.Имя = '') then
+        if (аИмя <> '') then
+          Имя = аИмя;
+        else
+          Имя = Код;
+        end;
+      end;
+      Modified = False;
+    end;
+  end;
+
+  proc ИнициализироватьПоУмолчанию synonym InitByDefault;
+    Init(,);
+  end;
+
+InObject Private
+
+
+End

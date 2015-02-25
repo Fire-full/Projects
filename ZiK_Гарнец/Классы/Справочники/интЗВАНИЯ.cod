@@ -1,0 +1,108 @@
+Class inherited МашинаРеквизитов.Базовые.интЗапись "Интерфейс: Справочники.ЗВАНИЯ";
+
+  Import СИС2     Classes Функции, СтроковыеФункции, ФункцииДокумента;
+  Import Первичка Classes Константы, Функции, Библио, Нумератор;
+  Import          Classes Константы;
+
+InClass Public
+
+  ---------------------------------------------------------
+  func СвязанныйКлассЗаписей : Class СИС2.Базовая.БазоваяЗапись;
+    Result = Справочники.ЗВАНИЯ;
+  end;
+
+  func Create :Справочники.интЗВАНИЯ;
+    Result        = inherited Create;
+    Result.Record = Справочники.ЗВАНИЯ.Create;
+  end;
+
+  func ОткрытьПоЗаписи synonym OpenRecord( aRec :Справочники.ЗВАНИЯ ) :Справочники.интЗВАНИЯ;
+    Result        = inherited Create;
+    Result.Record = aRec;
+  end;
+
+  -- функция возвращает бланк-редактор записи по умолчанию
+  func БланкРедакторПоУмолчанию :Class BlankForm;
+    Result = Справочники.редЗВАНИЯ;
+  end;
+
+  func БланкРедакторПоЗаписи (aRecord :Record) :Class BlankForm;
+    if aRecord<>nil then
+      if    aRecord.ТипЗаписи in [0, 1] then Result = Справочники.редЗВАНИЯ;
+      elsif aRecord.ТипЗаписи = 2       then Result = Справочники.редЗВАНИЯ;
+      elsif aRecord.ТипЗаписи = 3       then Result = Справочники.редЗВАНИЯ;
+
+      end;
+    else
+      Result = БланкРедакторПоУмолчанию;
+    end;
+  end;
+
+  -- функция возвращает картотеку записи по умолчанию
+  func КартотекаПоУмолчанию :Class CardForm;
+    Result = Справочники.картЗВАНИЯ;
+  end;
+
+  func КартотекаПоЗаписи (aRecord :Record) :Class CardForm;
+    if aRecord<>nil then
+      if    aRecord.ТипЗаписи in [0, 1] then Result = Справочники.картЗВАНИЯ;
+      elsif aRecord.ТипЗаписи = 2       then Result = Справочники.картЗВАНИЯ;
+      elsif aRecord.ТипЗаписи = 3       then Result = Справочники.картЗВАНИЯ;
+
+      end;
+    else
+      Result = КартотекаПоУмолчанию;
+    end;
+  end;
+
+InClass Private
+
+InObject Public
+
+  Record :Справочники.ЗВАНИЯ;
+
+  proc Инициализировать synonym Init(аИмя  :String = 'Новое звание/учёная степень';
+                                     аКод  :String = '');
+    Assert(Record.State = Kernel.Record.Created);
+    with Record do
+      if Имя = '' then
+        Имя = аИмя;
+      end;
+      if Код = '' then
+        if аКод <> '' then
+          Код = аКод;
+        end;
+      end;
+      КодФилиала = ПолучитьКодФилиала;
+      УровеньКонфиденциальности = ПолучитьУровеньКонфидПоУмолчанию;
+      Modified = False;
+    end;
+  end;
+
+  proc ИнициализироватьПоУмолчанию synonym InitByDefault;
+    Init;
+  end;
+
+InObject Private
+
+  -- Переменные для заполнения параметров нумерации по умолчанию...
+  var Нумератор_Способы[]      :Integer   = [снДокумент_Последовательно];
+  var Нумератор_ПоляНумерации[]:String    = ["Код"];
+  --------------------------------------------------------------------
+  proc ДействияПередЗаписью;
+    var локДобавлено :Logical;
+
+    inherited ДействияПередЗаписью;
+
+--    Первичка.Базовые.интБазовыйВидРасчета.СброситьКэширование;
+--    Record.GroupDoc = ГруппаДляЭлементаПоЗаписи(локДобавлено);
+--    if локДобавлено then
+      ЗаполнитьНомерДокумента2(["Код"]);
+--    end;
+  end;
+  ---------------------------------------------------------
+  ---------------------------------------------------------
+
+
+
+End

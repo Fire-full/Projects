@@ -1,0 +1,44 @@
+class inherited МашинаРеквизитов.Базовые.картЗаписьСРеквизитом "";
+
+inclass
+
+inobject
+
+--------------------------------------------------------------------------------
+--{ Обработчики событий картотеки
+
+  func CardOnClick(Action :Template.ClickTypes; Column :CardfileColumn; Record :Record) :Logical;
+    -- Реакция на нажатие в ячейке картотеки
+     
+    Result = True;   -- Продолжить стандартную обработку
+  end;
+
+  func CardOnCancel(Record :Record) :Logical;
+    -- Реакция на отмену изменения записи
+     
+    Result = True;   -- Выполнить отмену
+  end;
+
+  proc кнВыбрать_ПриНажатии(Sender :Button);
+    inherited кнВыбрать_ПриНажатии(Sender);
+      
+  end;
+
+  proc кнЗакрыть_ПриНажатии(Sender :Button);
+    inherited кнЗакрыть_ПриНажатии(Sender);
+      
+  end;
+
+  proc кнДобавить_ПриНажатии(Sender :Button);
+    inherited кнДобавить_ПриНажатии(Sender);
+      
+  end;
+
+  proc кнРедактировать_ПриНажатии(Sender :Button);
+    inherited кнРедактировать_ПриНажатии(Sender);
+      
+  end;
+
+--}
+
+end

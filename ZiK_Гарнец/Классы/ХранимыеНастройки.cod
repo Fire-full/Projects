@@ -1,0 +1,11 @@
+Class inherited СИС2.Параметры "Хранимые настройки";
+
+--@classdoc Класс предназначен для получения и установки настроек
+
+InClass Public
+
+
+InClass Private
+
+
+End

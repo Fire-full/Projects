@@ -1,0 +1,19 @@
+class "Сотр_Выслуга";
+
+InClass Private
+
+  var КлассИнтерфейса :Class МашинаРеквизитов.Базовые.интЗапись = Справочники.интСотр_Выслуга;
+
+InObject Private
+
+--  func картотека_ПриСозданииЗаписи(var Record :Справочники.Сотр_Выслуга) : Logical;
+--    Result = inherited картотека_ПриСозданииЗаписи(Record);
+--    if Result then
+--      if Record = nil then
+--         Record = CardFile.Records[1].Create;
+--      end;
+--      --Record.ТипЗаписи = 1;
+--    end;
+--  end;
+
+end

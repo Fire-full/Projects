@@ -1,0 +1,39 @@
+--Class Inherited Первичка.картБазовая_СПроводками "Мой табличный журнал";
+--
+--  Import СИС2;
+--
+--InObject Private
+--
+--  var кнУдалить       :Button;
+--  var кнРедактировать :Button;
+--
+--  proc кнДобавитьПроводку_ПриНажатии(Sender :Button);
+--    ExecuteCommand('Kernel.Account.InputTrans');
+--  end;
+--
+--  proc кнДобавитьТО_ПриНажатии(Sender :Button);
+--    ExecuteCommand('Kernel.Account.InputOper');
+--  end;
+--
+--  proc кнРедактировать_ПриНажатии(Sender :Button);
+--    ExecuteCommand('Kernel.Account.Change');
+--  end;
+--
+--  proc кнДублировать_ПриНажатии(Sender :Button);
+--    ExecuteCommand('Kernel.Card.Run.CloneRec');
+--  end;
+--
+--  proc ТабЖур_ПриПеремещении(aRecord :Record);
+--    кнУдалить.      Enabled = aRecord<>nil and not aRecord.Deleted;
+--    кнРедактировать.Enabled = aRecord<>nil and not aRecord.Deleted;
+--  end;
+--
+--  func ТабЖур_ПриСозданииЗаписи(var Record :Record) :Logical;
+--    Result = True;
+--  end;
+--
+--  func шаблон_ПриКоманде(Command :Command) :Logical;
+--    Result = inherited шаблон_ПриКоманде(Command);
+--  end;
+--
+--End
