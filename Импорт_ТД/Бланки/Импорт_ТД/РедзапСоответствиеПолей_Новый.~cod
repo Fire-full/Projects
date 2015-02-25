@@ -285,6 +285,11 @@ var FData            : Вариант[2];
     var хПодтаблица  : Подтаблица;
     inherited шаблон_ПриОткрытии(Create);
 
+     If КартотекаИмпорта="" then
+     ELSE
+       lClass = findclass(КартотекаИмпорта);
+     end;
+
      Если Позиции.Количество = 0 Тогда
 --       замок = ложь;
          Заполнен = ложь;
@@ -1074,29 +1079,29 @@ end;
     end;
   end;
   ---------------------------------------------------------
-  proc BlankOnOpen                         (Create      : Logical);
-    Перем I :Integer;
-      -------
-      ВидимостьПоляПодтаблица ;
-      -------
-      If КартотекаИмпорта="" then
-      ELSE
-         lClass = findclass(КартотекаИмпорта);
-      end;
-      If секПриемник.RowsCount>1 then
-          секПриемник.DeleteRow(1,секПриемник.RowsCount+1);
-      end;
-      if Отрезать(ИмяЛиста) = "" then
-        CheckBox2.State=Ложь;
-      ELSE
-        CheckBox2.State=Истина;
-      end;
-      ВидимостьСтолбцаИмяЛиста ;
-      для I = 1..ИмяЛистов.Количество цикл
-         секцИсточник.Cell[4,2].List.Add(ИмяЛистов[I].GetField("Имя"));
-      конец;
-    Create = True ;
-  end;
+--  proc BlankOnOpen                         (Create      : Logical);
+--    Перем I :Integer;
+--      -------
+--      ВидимостьПоляПодтаблица ;
+--      -------
+--      If КартотекаИмпорта="" then
+--      ELSE
+--         lClass = findclass(КартотекаИмпорта);
+--      end;
+--      If секПриемник.RowsCount>1 then
+--          секПриемник.DeleteRow(1,секПриемник.RowsCount+1);
+--      end;
+----      if Отрезать(ИмяЛиста) = "" then
+----        CheckBox2.State=Ложь;
+----      ELSE
+----        CheckBox2.State=Истина;
+----      end;
+--      ВидимостьСтолбцаИмяЛиста ;
+--      для I = 1..ИмяЛистов.Количество цикл
+--         секцИсточник.Cell[4,2].List.Add(ИмяЛистов[I].GetField("Имя"));
+--      конец;
+--    Create = True ;
+--  end;
   ---------------------------------------------------------
   func BlankBeforeClose                    (ModalResult : Integer) :Logical;
 
@@ -1599,7 +1604,7 @@ end;
     var StrValue, ПозицииИскатьПо           : string;
     var хПодтаблица                         : subtable;
 
-    хПодтаблица    = Позиции.CreateSubtableView('Загружаемое=Истина');
+    хПодтаблица    = Позиции.CreateSubtableView('Загружаемое=Истина');     --Убрать в проверку!!!!
     W              = хПодтаблица.count;
 
     if W=0 then
@@ -1622,28 +1627,28 @@ end;
                   -- Попытка получения "Ссылки" по "Код" или "Имя" из Импортируемых данных
                   if Позиции.Items[i].ТипДанныхКартПоля = 11 then -- Ссылка     Str(хПодтаблица.NumberByIndex[хПодтаблица.IndexByNumber[i]])
                     ПозицииИскатьПо = Позиции.Items[i].ИскатьПо;
-                    --if ПозицииИскатьПо = "1" then
-                    --  if ВКлассеЕстьПоле(мТипПолей[Q],"Код") then
-                    --    StrValue = "Код=" + maskChar(lStringValue,"'");
-                    --  end;
-                    --end;
-                    --if ПозицииИскатьПо = "2" then
-                    --  if ВКлассеЕстьПоле(мТипПолей[Q],"Имя") then
-                    --    StrValue = "Имя="+maskChar(lStringValue,"'");
-                    --  end;
-                    --end;
-                    if ПозицииИскатьПо = "3" then
+                    if ПозицииИскатьПо = "1" then
                       if ВКлассеЕстьПоле(ТипКартПоля,"Код") then
-                         StrValue = "(Код="+ maskChar(lStringValue,"'")+ ")";
-                      end;
-                      if ВКлассеЕстьПоле(ТипКартПоля,"Имя") then
-                        if StrValue="" then
-                          StrValue  =                 "(Имя="+maskChar(lStringValue,"'") + ")";
-                        Иначе
-                          StrValue  = StrValue + " или (Имя="+maskChar(lStringValue,"'") + ")";
-                        end;
+                        StrValue = "Код=" + maskChar(lStringValue,"'");
                       end;
                     end;
+                    if ПозицииИскатьПо = "2" then
+                      if ВКлассеЕстьПоле(ТипКартПоля,"Имя") then
+                        StrValue = "Имя="+maskChar(lStringValue,"'");
+                      end;
+                    end;
+--                    if ПозицииИскатьПо = "3" then
+--                      if ВКлассеЕстьПоле(ТипКартПоля,"Код") then
+--                         StrValue = "(Код="+ maskChar(lStringValue,"'")+ ")";
+--                      end;
+--                      if ВКлассеЕстьПоле(ТипКартПоля,"Имя") then
+--                        if StrValue="" then
+--                          StrValue  =                 "(Имя="+maskChar(lStringValue,"'") + ")";
+--                        Иначе
+--                          StrValue  = StrValue + " или (Имя="+maskChar(lStringValue,"'") + ")";
+--                        end;
+--                      end;
+--                    end;
                   end; --if Позиции[i].GetField("ТипДанныхКартПоля")=11 then -- Ссылка
 
               elsif РежЗагрузки=1 и Позиции.Items[i].РасчетноеВыражение > "" then     -- "РАСЧЁТ"
@@ -1657,6 +1662,7 @@ end;
                   -- Попытка получения
                   if Позиции.Items[i].ТипДанныхКартПоля = 11 then -- Ссылка
                     ПозицииИскатьПо = Позиции.Items[i].ИскатьПо;
+                    lRec = StringInRecord(lStringValue);
                     -- Позиции[i].GetField("ТипДанныхКартПоля")<>varString,lStringValue,maskChar(lStringValue,"'")
                     --if ПозицииИскатьПо="1" then
                     --  if ВКлассеЕстьПоле(мТипПолей[Q],"Код") then
@@ -1679,6 +1685,10 @@ end;
                           StrValue  = StrValue + " или (Имя="+maskChar(lStringValue,"'") + ")";
                         end;
                       end;
+                    Иначе
+                      if ПозицииИскатьПо="3" then
+                      Иначе
+                      end;
                     end;
                   end; --if Позиции[i].GetField("ТипДанныхКартПоля")=11 then -- Ссылка
               end;
@@ -1691,7 +1701,7 @@ end;
                   lRec = nil;
                 else
                     --lRec = FR(мТипПолей[Q], StrValue);
-                    --if lRec=nil и СоздаватьСсылки then --не нашли ссылку, создаем новую
+                    if lRec=nil и СоздаватьСсылки then --не нашли ссылку, создаем новую
                       --lRec = (мТипПолей[Q] as class).Create;
                       --сис2.функциидокумента.RecordEdit(lRec);
                       if ПозицииИскатьПо="2" then
@@ -1710,10 +1720,14 @@ end;
                             lRec.SetField ("Код", lStringValue );
                           end;
                         Иначе
-                          lRec = НайтиПоКоду(lStringValue);
-  --                         lRec.SetField ("Код", lStringValue );
-                          if ВКлассеЕстьПоле(ТипКартПоля, "Имя") and lRec.Имя="" then
-                            lRec.Имя = lRec.Код;
+                          if ПозицииИскатьПо="1" then
+                            lRec = НайтиПоКоду(lStringValue);
+    --                         lRec.SetField ("Код", lStringValue );
+                            if ВКлассеЕстьПоле(ТипКартПоля, "Имя") and lRec.Имя="" then
+                              lRec.Имя = lRec.Код;
+                            end;
+                          Иначе
+
                           end;
                         end;
                       end;
@@ -1725,7 +1739,7 @@ end;
                          Трассировка("Записать -'"+lStringValue+"' в "+Стр(ТипКартПоля)+" - не удалось!");
                       конец;
 
-  --                  end;
+                    end;
                 end;
                 if lRec = nil then
                   --
@@ -2002,7 +2016,7 @@ var aRow:integer ;
 -------------------------------------------------------------------------------------------
   var mTempRecord: Record;    --найденная/созданная запись
 -------------------------------------------------------------------------------------------
-  func StringInRecord (aString:string):record;
+  func StringInRecord синоним СВЗ (aString:string):record;
     var lPos:integer;
 
     if aString in ["nil",""] then
@@ -2063,7 +2077,7 @@ var aRow:integer ;
     g  = ДлинаМассива(FData)+НомСтр+1;
     while aRow < g do
   --  while ЗначениеХотяБыОдногоЗагружаемогоПоляЗадано do
-      hint("Загрузка строки " + str(i));
+      hint("Загрузка строки №" + str(i) +" из "+ );
       if ПолныеДанные then  --Иначе пропускаем
         try
           --Обнуляем переменные каждый Цикл!!!
