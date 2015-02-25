@@ -1,7 +1,7 @@
 [Options]
 Version=7
 Query=.Импорт_ТД.запСоответствиеПолей
-MBlank=.Импорт_ТД.РедзапСоответствиеПолей_Новый
+MBlank=.Импорт_ТД.РедСоответствиеПолей
 ShowDeleted=0
 HierarchicalField=Имя
 CanEdit=1
