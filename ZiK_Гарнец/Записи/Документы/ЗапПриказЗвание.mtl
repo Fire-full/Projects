@@ -1,0 +1,12 @@
+hierarchical record ЗапПриказЗвание inherited Первичка.Базовая.БазоваяИерархическаяКодИмя  title "ПРИКАЗ Звание";
+  field ДАТА                :DATE                         title ""; -- дата приказа
+  field ПРОВЕДЕН            :BOOLEAN                      title "";
+  field ОРГАНИЗАЦИЯ         :Базовый.Данные.Субъект       title "";
+  field КОММЕНТАРИЙ         :STRING                       title "";
+  struct ПОЗИЦИИ  array Integer     title "Военнослужащие";
+    field СОТР           :Базовый.Данные.Субъект          title "Полное наименование";
+    field ДАТАПРИСВОЕНИЯ :DATE                            title "ДАТА ПРИСВОЕНИЯ";
+    field НОМЕРПРИКАЗА   :String                          title "НОМЕР ПРИКАЗА";
+    field ЗВАНИЕ         :Zik_Гарнец.Справочники.ЗВАНИЯ   title "ЗВАНИЕ";
+  end;
+end;

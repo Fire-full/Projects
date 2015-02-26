@@ -13,12 +13,5 @@
     <Group Name="Бланки" Type="Blanks" Disabled="False"/>
     <Group Name="Картотеки" Type="Cards" Disabled="False"/>
     <Group Name="СтруктурыУчета" Type="CalcStructs" Disabled="False"/>
-    <Group Name="Операции" Type="CalcClasses" Disabled="False"/>
-    <Group Name="Отчеты" Type="Reports" Disabled="False"/>
-    <Group Name="Помощь" Type="Helps" Disabled="False"/>
-    <Group Name="Схемы доступа" Type="Access" Disabled="False"/>
-    <Group Name="Shared" Type="Other" Disabled="False"/>
-    <Group Name="Документация" Type="Other" Disabled="False"/>
-    <Group Name="Настройки печати" Type="Other" Disabled="False"/>
   </Groups>
 </Project>

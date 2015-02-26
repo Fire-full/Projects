@@ -1,0 +1,19 @@
+Class inherited Первичка.картБазовая_Справочник "Документ о присвоении Ученой степени/Звания";
+
+InClass Private
+
+  var КлассИнтерфейса :Class МашинаРеквизитов.Базовые.интЗапись = Документы.интПриказСотр_Звание;
+
+InObject Private
+
+  func картотека_ПриСозданииЗаписи(var Record :Документы.ЗапПриказЗвание) :Logical;
+    Result = inherited картотека_ПриСозданииЗаписи(Record);
+    if Result then
+      if Record = nil then Record = CardFile.Records[1].Create; end;
+      Record.ТипЗаписи = 1;
+    end;
+  end;
+
+end
+
+
