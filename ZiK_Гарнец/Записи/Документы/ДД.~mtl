@@ -1,6 +1,6 @@
 Group "ДД";
 
-hierarchical record ПРИКАЗНАДОЛЖНОСТЬ inherited Первичка.Базовая.БазоваяИерархическаяКодИмя  title "ПРИКАЗ НАЗНАЧЕНИЯ";
+hierarchical record ПРИКАЗНАДОЛЖНОСТЬ inherited Первичка.Базовая.БазоваяИерархическаяКодИмя    title "ПРИКАЗ НАЗНАЧЕНИЯ";
   field НОМЕР               :INTEGER       title "";
   field НОМЕРБУМ            :STRING       title "";
   field ДАТАПРИК            :DATE       title ""; -- дата приказа
@@ -54,7 +54,7 @@ hierarchical record ПРИКАЗНАДОЛЖНОСТЬ inherited Первичка.Базовая.БазоваяИерархич
   field ОТВЕТСТВЕННЫЙ :Базовый.Данные.Субъект;
 END;
 
-hierarchical record ВОЗВРАТНДФЛ inherited Первичка.Базовая.БазоваяИерархическаяКодИмя  title "Возврат НДФЛ по соц/имущ вычету";
+hierarchical record ВОЗВРАТНДФЛ inherited Первичка.Базовая.БазоваяИерархическаяКодИмя          title "Возврат НДФЛ по соц/имущ вычету";
   field НОМЕР           :INTEGER       title "";
   field НОМЕРБУМ        :STRING       title "";
   field ДАТАДОК         :DATE       title "";
@@ -118,8 +118,7 @@ hierarchical record ОснованиеДляПроезда inherited Первичка.Базовая.БазоваяИерарх
   field ОТВЕТСТВЕННЫЙ    :Базовый.Данные.Субъект;
 END;
 
-
-hierarchical record СПРАВКА_0504833 inherited Первичка.Базовая.БазоваяИерархическаяКодИмя  title "Бухгалтерская справка 0504833";
+hierarchical record СПРАВКА_0504833 inherited Первичка.Базовая.БазоваяИерархическаяКодИмя      title "Бухгалтерская справка 0504833";
   field ПРОВОДИТЬ   :BOOLEAN       title "";
   field ОРГ         :STRING       title ""; --Название организации
   field ДАТАОПЕР    :DATE       title "";   --Дата проводки

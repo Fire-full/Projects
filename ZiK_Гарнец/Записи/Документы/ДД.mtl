@@ -1,29 +1,29 @@
 Group "ДД";
 
 hierarchical record ПРИКАЗНАДОЛЖНОСТЬ inherited Первичка.Базовая.БазоваяИерархическаяКодИмя    title "ПРИКАЗ НАЗНАЧЕНИЯ";
-  field НОМЕР               :INTEGER       title "";
+  field НОМЕР               :INTEGER      title "";
   field НОМЕРБУМ            :STRING       title "";
-  field ДАТАПРИК            :DATE       title ""; -- дата приказа
-  field ПРОВЕДЕН            :BOOLEAN       title "";
+  field ДАТАПРИК            :DATE         title ""; -- дата приказа
+  field ПРОВЕДЕН            :BOOLEAN      title "";
   field ОРГАНИЗАЦИЯ         :Базовый.Данные.Субъект       title "";
-  field НАЗНАЧЕНИЕДОКУМЕНТА :INTEGER       title ""; --0 - Зачисление в штат; 1 - Перемещение;...
+  field НАЗНАЧЕНИЕДОКУМЕНТА :INTEGER      title ""; --0 - Зачисление в штат; 1 - Перемещение;...
   field КОММЕНТАРИЙ         :STRING       title "";
-  struct ВОЕННОСЛУЖАЩИЕ  array Integer       title "Военнослужащие";
+  struct ВОЕННОСЛУЖАЩИЕ  array Integer    title "Военнослужащие";
     field Nстроки          :INTEGER       title ""; --Номер строки в приказе
     field СОТРУДНИК        :Базовый.Данные.Субъект       title "";
     field ПОДРАЗДЕЛЕНИЕ    :Базовый.Данные.Субъект       title "";
     field ДОЛЖНОСТЬ        :Первичка.Субъекты.Сотр_Перемещения       title "";
-    field ДАТАПРИЕМА       :DATE       title "";
-    field ДАТАВСТУПЛЕНИЯ   :DATE       title "";
+    field ДАТАПРИЕМА       :DATE         title "";
+    field ДАТАВСТУПЛЕНИЯ   :DATE         title "";
     field ГРАФИКРАБОТЫ     :STRING       title "";
-    field Оклад            :REAL       title "";
+    field Оклад            :REAL         title "";
     field РАЗРЯД           :Первичка.Справочники.ВидыНачислений       title "";
     --Ден. Аттестат
-    field УДОВЛЕТВОРЕНПО   :DATE       title "";
+    field УДОВЛЕТВОРЕНПО   :DATE          title "";
     field ПОЛУЧАЛМАТПОМОЩЬ :BOOLEAN       title "";
     field ПОЛУЧАЛСКЛ       :BOOLEAN       title "";
-    field Дата_ДенАтт      :DATE       title "";
-    field ПрибылИз         :STRING       title "";
+    field Дата_ДенАтт      :DATE          title "";
+    field ПрибылИз         :STRING        title "";
     --Ден. Аттестат
   end;
   struct НАДБАВКИ  array Integer       title "Значения Надбавок";

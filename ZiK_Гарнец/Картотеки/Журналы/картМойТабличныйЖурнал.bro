@@ -1,12 +1,14 @@
 [Options]
-Version=6
+Version=7
 Query=Kernel.ТабЖур
 ShowDeleted=0
 CanEdit=0
-CanSearchInplace=0
+ActionOnType=0
 Hierarchical=0
 CanHGroupModify=0
 AutoOpen=1
+CanAcceptAnyRecord=0
+CanDropOnRecord=0
 OnMove=ТабЖур_ПриПеремещении
 OnCreateRecord=ТабЖур_ПриСозданииЗаписи
 CaptionRows=1
@@ -26,7 +28,7 @@ Column:3=СуммаБаз
 Column:4=Название
 Column:5=НашеПредприятие
 Column:6=Комментарий
-TreeVisible=0
+TreeVisible=1
 TreeWidth=120
 SubTableVisible=0
 SubTableWidth=100
