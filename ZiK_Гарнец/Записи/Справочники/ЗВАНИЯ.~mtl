@@ -1,6 +1,4 @@
 hierarchical record ЗВАНИЯ inherited Первичка.Базовая.БазоваяИерархическаяКодИмя  title "ЗВАНИЯ";
-  field GroupPath        :String(MaxIndexedStr);
-  field Замок            :Logical title "Объект заблокирован";
   field ВЗПОЛН           :STRING       title "Полное наименование"; --полное наименование звания
   field ТипЗаписи        :Integer      title "Тип Записи";    --0...1-Спец. Звание, 2-Ученая Степень, 3-Ученое Звание
   field Комментарий      :String       title "Комментарий";   -- произвольный комментарий
