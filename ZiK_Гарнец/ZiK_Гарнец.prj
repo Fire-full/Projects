@@ -10,8 +10,8 @@
   <Groups>
     <Group Name="Записи" Type="Documents" Disabled="False"/>
     <Group Name="Картотеки" Type="Cards" Disabled="False"/>
-    <Group Name="Бланки" Type="Blanks" Disabled="False"/>
     <Group Name="Классы" Type="Classes" Disabled="False"/>
+    <Group Name="Бланки" Type="Blanks" Disabled="False"/>
     <Group Name="СтруктурыУчета" Type="CalcStructs" Disabled="False"/>
   </Groups>
 </Project>
