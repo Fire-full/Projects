@@ -1,8 +1,9 @@
 [Options]
 Version=7
-Query=.Импорт_ТД.ЗапМаркёры
+Query=.Импорт_ТД.ЗапМаркёры,.Импорт_ТД.ЗапМаркеры
 MBlank=.Импорт_ТД.РедМаркёры
 ShowDeleted=0
+HierarchicalField=Имя
 CanEdit=1
 ActionOnType=0
 Hierarchical=0
@@ -10,6 +11,7 @@ CanHGroupModify=1
 AutoOpen=1
 CanAcceptAnyRecord=0
 CanDropOnRecord=0
+OrderBy=Код
 CaptionRows=1
 ShowSummary=0
 ShowCount=1
