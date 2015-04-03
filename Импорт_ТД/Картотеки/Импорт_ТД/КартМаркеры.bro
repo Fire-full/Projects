@@ -1,7 +1,7 @@
 [Options]
 Version=7
-Query=.Импорт_ТД.ЗапМаркёры,.Импорт_ТД.ЗапМаркеры
-MBlank=.Импорт_ТД.РедМаркёры
+Query=.Импорт_ТД.ЗапМаркеры
+MBlank=.Импорт_ТД.РедМаркеры
 ShowDeleted=0
 HierarchicalField=Имя
 CanEdit=1
@@ -38,8 +38,8 @@ SubTableWidth=100
 SubTableHeight=147
 SubTablePlace=2
 SubTableAlign=1
-TemplateVisible=0
-TemplateWidth=0
+TemplateVisible=1
+TemplateWidth=10
 TemplateHeight=0
 TemplatePlace=1
 CanResizeTemplate=0

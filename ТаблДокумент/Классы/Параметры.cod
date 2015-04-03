@@ -45,11 +45,7 @@ inobject Public
      Илсе;
       Result = Истина;
   end;
-  func Заполнить     Synonym   Fill (2var locSec :0Вариант2 0) : Логическое;
-     var j,k, RowsКолич, ColumnsКолич : Integer;
-     var Sec   2         0:2 0TemplateSection;
-     var ThisCell2       0:2 0TemplateCell;
-     var ThisTargetCell :2 0TemplateCell;
+  func Заполнить     Synonym   Fill (2locSec :0Вариант2 0) : Логическое;
 
       ЗаполнитьПараметры  (2locSec0);
 

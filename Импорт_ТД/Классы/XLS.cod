@@ -155,6 +155,9 @@ end;
 ---------------------------------------------------------------------------------------
 Функ ВзятьXLSАдресИскомого  ( ЧегоИщем : Вариант;  ВКакомДиапазоне : Строка; Где :AutoObject=Nil) : Строка ;
   Перем  ActiveCell, firstAddress : Вариант;
+    If Где=Nil  Then
+      Где=АктивWorkSheet;
+    End ;
     If Где=Nil Then
         ActiveCell = АктивWorkSheet.Range[ ВКакомДиапазоне ].Find( ЧегоИщем );
         If ActiveCell = NIL Then
@@ -164,12 +167,17 @@ end;
         End ;
       Результат = firstAddress;
     Иначе
-        ActiveCell = Где.Range[ ВКакомДиапазоне ].Find( ЧегоИщем );
-        If ActiveCell = NIL Then
-          firstAddress = "";
-        Иначе
-          firstAddress = ActiveCell.Address;
-        End ;
+        Попытка
+          ActiveCell = Где.Range[ ВКакомДиапазоне ].Find( ЧегоИщем );         -- Где.Range[ ВКакомДиапазоне ].Value
+          If ActiveCell = NIL Then
+            firstAddress = "";
+            Трассировка("Ошибка поиска строки: '"+ЧегоИщем);
+          Иначе
+            firstAddress = ActiveCell.Address;
+          End ;
+        Исключение
+           Трассировка("[Код:'ВзятьXLSАдресИскомого'] Ошибка определения диапазона поиска для строки: '"+ЧегоИщем);
+        Конец;
       Результат = firstAddress;
     End ;
 
@@ -221,6 +229,7 @@ end;
         Трассировка("Открытие файла - "+FileName+"...");
       окончание
         Результат = Excel;
+        Трассировка("Файл - '"+FileName+"'... не существует.");
       конец;
     конец;
   -------
@@ -277,12 +286,13 @@ end;
   Результат = Workbook ;
 конец;
 ------------------------------------------------------------------------------------------
-Функ XLS_Create : AutoObject;
+Функ Create : Импорт_ТД.XLS;
+
   Excel               = AutoObject.Create ('Excel.Application') ;
   Excel.Visible       = Visible ; -- Не открывать для просмотра
   Excel.DisplayAlerts = DisplayAlerts ;
   НашаКнигаXLS        = Excel.Workbooks.Add();
-  Результат = Excel ;
+
 конец;
 ------------------------------------------------------------------------------------------
 Функ  ИменаЛистовНашейКниги (Перем Книга_ :AutoObject = NIL ) : Строка [];
