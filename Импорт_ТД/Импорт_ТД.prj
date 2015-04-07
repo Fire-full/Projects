@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <Project Version="1">
-  <Options Caption="Импорт данных" Comment="Проект создан мастером проектов" Version="1.00" Author="Copyright © 2014 FOE" Code="0" SubCode="0" WebCode="0" WebSubCode="0" Frontal="True"/>
+  <Options Caption="Импорт табличных (структурированных) данных" Comment="Импорт табличных (структурированных) данных" Version="1.00" Author="Copyright © 2014 &quot;Garnec&quot; - &quot;F.O.E.&quot;" Code="0" SubCode="0" WebCode="0" WebSubCode="0" Frontal="True"/>
   <Usage>
     <Project Name="СИС2"/>
     <Project Name="МашинаРеквизитов"/>
