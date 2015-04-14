@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <Project Version="1">
-  <Options Caption="Табличный Документ" Comment="Вывод на печать произвольного Табличного Документа " Version="0.0.0001" Author="&quot;Китайский Комсомолец&quot;" Code="0" SubCode="0" WebCode="0" WebSubCode="0" Frontal="False"/>
+  <Options Caption="Табличный Документ" Comment="Вывод на печать Табличного Документа (печатной формы)" Version="0.0.0001" Author="&quot;Китайский Комсомолец&quot;" Code="0" SubCode="0" WebCode="0" WebSubCode="0" Frontal="True"/>
   <Usage>
     <Project Name="СИС2"/>
     <Project Name="МашинаРеквизитов"/>

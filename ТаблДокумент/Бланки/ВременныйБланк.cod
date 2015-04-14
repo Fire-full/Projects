@@ -2,8 +2,9 @@ class "Бланк Временных Данных";  --Предназначен для решения временных и частных 
 
 inclass
 
-ПутьКДопШабл  : Строка;
-SectionsCount : Целое ;
+ПутьКДопШабл      : Строка;
+SectionsCount     : Целое ;
+КоличествоФреймов : Целое ;
 
 inobject
 
@@ -14,7 +15,7 @@ inobject
     Если ПутьКДопШабл="" Тогда
     Иначе
        Self.LoadTemplate (ПутьКДопШабл, -1);
-       SectionsCount = Template.CurrentFrame.SectionsCount;
+       SectionsCount = Template.CurrentFrame.SectionsCount;   --Template.CurrentFrame.Имя
     Илсе;
   end;
 --------------------------------------------------------------------------------
