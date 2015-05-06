@@ -1,45 +1,58 @@
 class "Функции";
 
-Import ТаблДокумент  Classes ТабличныйДокумент, Макет ;
+Import ТаблДокумент  Classes ТабличныйДокумент ;
 
 inclass
 
-Фреймы                    : ФреймШаблона [];2 0   2-- Фреймы Бланка Приемника
-мас2Области  0              : Вариант[2];  2    0--2 0Соответствие Названия поля и его Значения
+  -------------------------------------------------
+  func ИзСтроки                            (aVarType : Integer;      aValue :Variant ) :Variant;
 
-  func ИндексСтроки           (const Cell :TemplateCell) :Integer;
-    var locSec :TemplateSection;
-
-    locSec = Cell.Section;
-    if locSec.EnableRepeat and locSec.Count > 0 then
-      if locSec.Subtable <> nil then
-        Result = Int(locSec.Subtable.IndexByNumber[Cell.Frame]) + 1;
-      else
-        Result = Cell.Frame;
+      if aValue in [Nil, ""]  then
+        aValue = Nil ;
       end;
-    end;
+
+      if (aVarType = varString) then
+         Result = aValue;
+            if Result = nil then
+              Сообщение("Не верное 2приведение к0 тип2у0 данных!" + "[Строка<>"+ ВСтр(aValue)+"]");
+            end;
+      elsif (aVarType = varInt) then
+2          Попытка
+            if aValue in [Nil, ""] then
+              Result = Int (Nil);
+            Иначе
+              Result = Int (aValue);
+            end;
+          Исключение
+              Сообщение("Не верное 2приведение к0 тип2у0 данных!" + "[Целое<>"+ ВСтр(aValue)+"]");
+          2К0онец;
+      elsif (aVarType = varNumeric) then
+2          Попытка
+            if aValue in [Nil, ""] then
+              Result = КакЧисло (Nil);
+            Иначе
+              Result = КакЧисло (aValue);
+            end;
+          Исключение
+              Сообщение("Не верное 2приведение к0 тип2у0 данных!" + "[Число<>"+ ВСтр(aValue)+"]");
+          2К0онец;
+      elsif (aVarType = varLogical) then
+            Result = (Up(aValue) = 'TRUE') or (Up(aValue) = 'ИСТИНА') or (Up(aValue) = '1');
+      elsif (aVarType = varDate) then
+2          Попытка
+            if aValue in [Nil, ""] then
+              Result = StringToDate(Nil);
+            Иначе
+              Result = StringToDate(aValue);
+            end;
+          Исключение
+              Сообщение("Не верное 2приведение к0 тип2у0 данных!" + "[Дата<>"+ ВСтр(aValue)+"]");
+          2К0онец;
+      end;
   end;
-
-  Функ ВзятьСекциюПоИмени     (ШАБЛОН: Template; Имя: Строка):  TemplateSection;
-    var j,z  : Integer;
-    var Sect : TemplateSection;
-      Результат =2 Nil0; Фреймы =2 Nil0;
-      ВзятьВсеФреймы2Бланка0 (ШАБЛОН.RootFrame2, 0Фреймы); -- Массив всех Фреймов в Бланке
-      for j=1.. ДлинаМассива(Фреймы)  do               -- По Фреймам бланка...
-        for z=1.. Фреймы[j].SectionsCount  do          -- По Секц. Фрейма
-          Sect = Фреймы[j].Section[z];
-          если Sect.Имя = Имя тогда  2 0 -- Если наша секция
-              Результат = Sect;
-              ВОЗВРАТ;
-          конец;
-        Od;
-      Od;
-  Кнуф;
-
+  -------------------------------------------------
   Функ ВзятьВсеФреймы2Бланка0   (TempSec:2 0ФреймШаблона2; 0var2 arr0Temp2 0: ФреймШаблона2[] = Nil0) :Целое;
---Для поиска "Нашей" секции в бланке!
     var j,N    : Integer;
-
       Если TempSec=2Nil0 Тогда
       2Иначе
         N=TempSec.FramesCount;                         -- Кол. Фреймов в бланке
@@ -55,70 +68,23 @@ inclass
 
     Результат = ДлинаМассива(2arr0Temp);
   Кнуф;
-
-  Функ ЗаполнитьПоИменованныеОбъектыШаблона  (мас2Обл0 :2 0Вариант2[022]0;   Фреймы :2 0ФреймШаблона2[]0) :Логическое;
-    var j,z,x,k : Integer;
-    var Sect    : TemplateSection ;
-
-    мас2Области0 = Nil;
-    for j=1.. ДлинаМассива(Фреймы)  do            -- По Фреймам бланка...
-      for z=1.. Фреймы[j].SectionsCount  do       -- По Секц. Фрейма
-        Sect = Фреймы[j].Section[z];
-        Если Sect.Имя = "" Тогда
-        Иначе
-  2        0ВставитьВМассив (мас2Области0[1], z, 2Up(0Sect.Имя)2     0);
-  2        0ВставитьВМассив (мас2Области0[220], z, Sect2    0     2    0);
-  2        0ВставитьВМассив (мас2Области0[230], z, Фреймы[j]    2    0);
-          ВставитьВМассив (мас2Области0[4], z, 2Up(0Фреймы[j].Имя));
-          --Поиск Именованных Колонок
-          for x=1.. Sect.ColumnsCount  do
-            Если Sect.Column[x].Имя = "" Тогда
-            Иначе
-              k  =  LengthOfArray (мас2Области0[1]);
-      2        0ВставитьВМассив (мас2Области0[1], 1+k, 2Up(0Sect.Column[x].Имя));
-      2        0ВставитьВМассив (мас2Области0[220], 1+k, Sect.Column[x]2    0    );
-      2        0ВставитьВМассив (мас2Области0[230], 1+k, Sect     2         0    );
-      2        0ВставитьВМассив (мас2Области0[4], 1+k, 2Up(0Sect.Имя) 2     0    );
-            Илсе;
-          Od;
-          --Поиск Именованных Строк
-          for x=1.. Sect.RowsCount  do
-            Если Sect.Row[x].Имя = "" Тогда
-            Иначе
-              k  =  LengthOfArray (мас2Области0[1]);
-      2        0ВставитьВМассив (мас2Области0[1], 1+k, 2Up(0Sect.Row[x].Имя));
-      2        0ВставитьВМассив (мас2Области0[220], 1+k, Sect.Row[x]2    0    );
-      2        0ВставитьВМассив (мас2Области0[230], 1+k, Sect     2      0    );
-              ВставитьВМассив (мас2Области0[4], 1+k, 2Up(0Sect.Имя) 2  0    );
-            Илсе;
-          Od;
-        Илсе;
-      Od;
-    Od;
-    мас2Обл0    = мас2Области0;
-    Результат = Истина;
-  Кнуф;
-
-  func ВернутьВысотуСтрок     (var sec:section=nil) : integer;
-    var j,i,f : integer;
+  -------------------------------------------------
+  func ВернутьВысотуСтрок     (sec:section) : integer;
+    var j,i,f, rowscount : integer;
     var Sect : TemplateSection;
+    var ФреймШаблонаПолучателя : Template;
       result = 0;
-      if sec = nil then
-        f = ТабДок.ФреймШаблонаПолучателя.SectionsCount;  --Текущий Фрейм
+      ФреймШаблонаПолучателя = sec.Owner;
+        f = ФреймШаблонаПолучателя.SectionsCount;  --Текущий Фрейм
         for i = 1 .. f do
-          Sect = ТабДок.ФреймШаблонаПолучателя.Section[i] ;
-          for j = 1 .. Sect.rowscount do
+          Sect = ФреймШаблонаПолучателя.Section[i] ;
+          rowscount = Sect.rowscount;
+          for j = 1 .. rowscount do
             result = result + int(Sect.row[j].height);
           end;
         end;
-      Иначе
-        if sec.rowscount > 0 then
-           for j = 1 .. sec.rowscount do
-             result = result + int(sec.row[j].height);
-           end;
-        end;
-      end;
   end;
+  -------------------------------------------------
   func ВернутьШиринуСтолбцов  (аСекция:section) : integer;
     var i :integer;
       result = 0;
@@ -128,40 +94,7 @@ inclass
          end;
       end;
   end;
-  func ЗаголовокСтраниц       (var2 0Temp2 0: Вариант2 = Nil0): Вариант;
-      Если источникSec=Nil Тогда
-      Иначе
-        ЗаголовокСтраницSec      = источникSec;
-        ЗаголовокСтраницSec.Видна= Истина;
-        ВыводитьЗаголовокСтраниц = Истина ;
-        хКолРядовЗаголовка       = ЗаголовокСтраницSec.RowsCount;
-        хКолСтолбцовЗаголовка    = ЗаголовокСтраницSec.ColumnsCount;
-      Илсе;
-      Результат = ТекущКласс ;   -- Пока не знаю что возвращать
-  Кнуф;
-  func ИтогиСтраниц           (var2 0ОтКуда2 0: Вариант2 = Nil0; var2 0Куда2 0: Вариант2 = Nil0): Вариант; --   "ОтКуда" и "Куда"
-      Если источникSec=Nil Тогда
-      Иначе
-
-        Если ОтКуда = 2Nil0 Тогда   --Если ОтКуда = 2Nil0 то и Куда должен быть = 2Nil
-        Иначе
-          Если VarType(ОтКуда)=varArray и VarType(Куда) = varArray Тогда
-
---            Если ДлинаМассива(ОтКуда) = ДлинаМассива(Куда) Тогда
---
---            Илсе;
-          Иначе
-          Илсе;
-        Илсе;
-
-        ИтогиСтраницSec       = источникSec;
-        ИтогиСтраницSec.Видна = Истина;
-        ВыводитьИтогиСтраниц  = Истина;
-        хКолРядовИтоги        = ИтогиСтраницSec.RowsCount;
-        хКолСтолбцовИтоги     = ИтогиСтраницSec.ColumnsCount;
-      Илсе;
-      Результат = ТекущКласс ;
-  Кнуф;
+  -------------------------------------------------
 
 inobject
 

@@ -1,24 +1,75 @@
 class "Бланк Временных Данных";  --Предназначен для решения временных и частных задачь.
 
-inclass
+Import   ТаблДокумент  Classes Функции;
 
-ПутьКДопШабл      : Строка;
-SectionsCount     : Целое ;
-КоличествоФреймов : Целое ;
+inclass Public
 
-inobject
+--{ inClass
+  func Создать synonym Create : ТаблДокумент.ВременныйБланк ;
+     Result = inherited Create;
+     Result.Init(Result);
+  end ;
+--} inClass
 
+inobject Public
+
+--{ inObject Перем
+
+Перем ПутьКДопШабл      : Строка;
+Перем SecTemp           : TemplateSection;
+Перем SectionsCount     : Целое ;
+Перем КоличествоФреймов : Целое ;
+Перем КоличествоСтрок   : Целое ;
+Перем КоличествоКолонок : Целое ;
+Перем ВысотаШаблона     : Целое ;
+Перем ШиринаШаблона     : Целое ;
+
+--} inObject Перем
+
+--{ inObject proc
 --------------------------------------------------------------------------------
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-  proc BlankOnCreate(Context :Variant);
-    Если ПутьКДопШабл="" Тогда
-    Иначе
-       Self.LoadTemplate (ПутьКДопШабл, -1);
-       SectionsCount = Template.CurrentFrame.SectionsCount;   --Template.CurrentFrame.Имя
-    Илсе;
+  proc Init 2(0CurAr2a : 0ТаблДокумент.ВременныйБланк2)0;
+
+     ПутьКДопШабл      = "";
+     SecTemp           = Nil;
+     SectionsCount     = 0 ;
+     КоличествоФреймов = 0 ;
+     КоличествоСтрок   = 0 ;
+     КоличествоКолонок = 0 ;
+
+     Если Self.Template.RootFrame.SectionsCount=0 Тогда
+       SecTemp = Self.Template.RootFrame.InsertSection(1);   -- БланкМакета.Шаблон.ТекущийФрейм.Имя = "RootFrame"
+     иначе
+       SectionsCount = Self.Template.RootFrame.SectionsCount;
+       Пока SectionsCount>0 ЦИКЛ
+         Self.Template.RootFrame.DeleteSection(SectionsCount) ;
+         SectionsCount = Self.Template.RootFrame.SectionsCount;
+       Лкиц;
+       SecTemp = Self.Template.RootFrame.InsertSection(1);   -- БланкМакета.Шаблон.ТекущийФрейм.Имя = "RootFrame"
+       self.Template.CurrentSection = SecTemp;
+     Илсе;
+
+     Обновить;
+
   end;
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+  proc Загрузить (Context :Строка);
+    Если Context="" Тогда
+    Иначе
+       Self.LoadTemplate (Context, -1);
+       Обновить;
+       ПутьКДопШабл  = Context;
+    Илсе;
+  end;
 --------------------------------------------------------------------------------
+  Проц Обновить;
+       SectionsCount     = Self.Template.CurrentFrame.SectionsCount;
+       КоличествоФреймов = ВзятьВсеФреймы2Бланка0(Self.Template2.0RootFrame);
+       КоличествоСтрок   = SecTemp.КоличествоСтрок;
+       КоличествоКолонок = SecTemp.ColumnsCount;
+  Цорп;
+--------------------------------------------------------------------------------
+--} inObject
+
 end

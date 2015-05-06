@@ -2,6 +2,11 @@
 Thumbs.db
 ehthumbs.db
 
+# T-9 file caches
+*.dsk
+*.~???
+*.#???
+
 # Folder config file
 Desktop.ini
 

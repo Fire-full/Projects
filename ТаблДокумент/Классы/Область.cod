@@ -1,7 +1,8 @@
 Class "Область"   ;            --"Параметры"
 --Class      inherited Макет "Область"   ;            --"Параметры"
 
-Import         Classes Макет, Области, Функции ;
+--Import         Classes Макет, Области, Функции ;
+Import         Classes Макет, Функции ;
 
 inclass -- Public -- Private
 
